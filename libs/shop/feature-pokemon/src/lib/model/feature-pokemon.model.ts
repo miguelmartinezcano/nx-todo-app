@@ -45,3 +45,81 @@ export interface CardBrief {
   image?: string;
 }
 
+export const PokemonSerieses = [
+    {
+        id: 'base',
+        name: 'Base',
+    },
+    {
+        id: 'bw',
+        name: 'Black/White',
+    },
+    {
+        id: 'col',
+        name: 'Colosseum',
+    },
+    {
+        id: 'dp',
+        name: 'Diamond/Pearl',
+    },
+    {
+        id: 'ecard',
+        name: 'E-Card',
+    },
+    {
+        id: 'ex',
+        name: 'Ex',
+    },
+    {
+        id: 'gym',
+        name: 'Gym',
+    },
+    {
+        id: 'hgss',
+        name: 'HeartGold/SoulSilver',
+    },
+    {
+        id: 'lc',
+        name: 'Legendary Collection',
+    },
+    {
+        id: 'me',
+        name: 'Mega Evolution',
+    },
+    {
+        id: 'misc',
+        name: 'Misc',
+    },
+    {
+        id: 'neo',
+        name: 'Neo',
+    },
+    {
+        id: 'pl',
+        name: 'Platinum',
+    },
+    {
+        id: 'pop',
+        name: 'POP Series',
+    },
+    {
+        id: 'sm',
+        name: 'Sun/Moon',
+    },
+    {
+        id: 'sv',
+        name: 'Scarlet/Violet',
+    },
+    {
+        id: 'swsh',
+        name: 'Sword/Shield',
+    },
+    {
+        id: 'tcgp',
+        name: 'TCG Promos',
+    },
+    {
+        id: 'xy',
+        name: 'X/Y',
+    }
+] as const;
