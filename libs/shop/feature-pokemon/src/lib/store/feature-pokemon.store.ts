@@ -5,16 +5,17 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { PokemonSet } from '../model/feature-pokemon.model';
 import { FeaturePokemonService } from '../service/feature-pokemon.service';
 import { inject } from '@angular/core';
-import { pipe, switchMap, tap } from 'rxjs';
+import { delay, of, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
+import { ResourceStatus } from '@angular/core';
 
 type PokemonState = {
-  isLoading: boolean;
+  status: ResourceStatus;
   filter: { query: string; order: 'asc' | 'desc' };
 };
 
 const initialState: PokemonState = {
-  isLoading: false,
+  status: 'idle' as ResourceStatus,
   filter: { query: '', order: 'asc' },
 };
 
@@ -27,22 +28,27 @@ export const FeaturePokemonStore = signalStore(
     withMethods((store) => ({
         loadPokemonSet: rxMethod<void>(
             pipe(
-                tap(() => patchState(store, { isLoading: true })),
+                tap(() => patchState(store, { status: 'loading' as ResourceStatus })),
                 switchMap(() =>
-                    store.featurePokemonService.getPokemonSets().pipe(
-                        tapResponse({
-                            next: (set) => patchState(store, setEntities(set), { isLoading: false }),
-                            error: () => patchState(store, { isLoading: false }),
-                        })
+                    of(null).pipe(
+                        delay(2000),
+                        switchMap(() =>
+                            store.featurePokemonService.getPokemonSets().pipe(
+                                tapResponse({
+                                    next: (set) => patchState(store, setEntities(set), { status: 'success' as ResourceStatus }),
+                                    error: () => patchState(store, { status: 'error' as ResourceStatus }),
+                                })
+                            )
+                        )
                     )
                 )
             )
         )
     })),
+    withDevtools('PokemonSetStore'),
     withHooks((store) => ({
         onInit() {
             store.loadPokemonSet();
         }
-    })),
-    withDevtools('PokemonSetStore')
+    }))
 );

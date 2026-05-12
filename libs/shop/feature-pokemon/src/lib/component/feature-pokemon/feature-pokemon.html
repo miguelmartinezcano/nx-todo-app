@@ -2,10 +2,17 @@
     <h2>
         TCG Pokemon Sets
     </h2>
+    <div class="set-container">
     @for (set of store.entities(); track set.id) {
-        <div>
-            <h3>{{ set.name }}</h3>
-            <img class="set-logo" [src]="`${set.logo}.png`" [alt]="set.name">
-        </div>
+        <mat-card class="set-card" appearance="outlined">
+            <mat-card-header>
+                <mat-card-title>{{ set.name }}</mat-card-title>
+                <mat-card-subtitle><b>{{ set.cardCount.total }}</b> cards</mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <img class="set-logo" [src]="set.logo ? set.logo + '.png' : '/imageError.png'" [alt]="set.name" (error)="onLogoError($event)">
+            </mat-card-content>
+        </mat-card>
     }
+    </div>
 </div>
