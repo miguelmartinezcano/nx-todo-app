@@ -1,0 +1,11 @@
+<div class="pokemon-set-container">
+    <h2>
+        TCG Pokemon Sets
+    </h2>
+    @for (set of store.entities(); track set.id) {
+        <div>
+            <h3>{{ set.name }}</h3>
+            <img class="set-logo" [src]="`${set.logo}.png`" [alt]="set.name">
+        </div>
+    }
+</div>

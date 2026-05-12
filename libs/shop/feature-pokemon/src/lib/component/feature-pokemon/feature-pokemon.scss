@@ -1,0 +1,19 @@
+.set-logo {
+    --set-logo-size: 100px;
+
+    width: var(--set-logo-size);
+    height: var(--set-logo-size);
+    object-fit: contain;
+    display: block;
+}
+
+@media (max-width: 600px) {
+    .set-logo {
+        --set-logo-size: 72px;
+    }
+}
+
+.pokemon-set-container {
+    max-width: 1150px;
+    margin: 0 auto;
+}

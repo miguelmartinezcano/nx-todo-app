@@ -12,6 +12,11 @@ export const appRoutes: Route[] = [
       import('@org/shop/feature-products').then(m => m.featureProductsRoutes),
   },
   {
+    path: 'pokemon',
+    loadChildren: () =>
+      import('@org/feature-pokemon').then(m => m.featurePokemonRoutes),
+  },
+  {
     path: 'products',
     loadChildren: () =>
       import('@org/shop/feature-product-detail').then(
