@@ -12,6 +12,13 @@ export const appRoutes: Route[] = [
       import('@org/shop/feature-products').then((m) => m.featureProductsRoutes),
   },
   {
+    path: 'pokemon/:setId',
+    loadChildren: () =>
+      import('@org/feature-pokemon-cards').then(
+        (m) => m.featurePokemonCardsRoutes,
+      ),
+  },
+  {
     path: 'pokemon',
     loadChildren: () =>
       import('@org/feature-pokemon-set').then((m) => m.featurePokemonSetRoutes),

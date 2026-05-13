@@ -1,5 +1,5 @@
 .set-logo {
-  --set-logo-size: 100px;
+  --set-logo-size: 180px;
 
   width: var(--set-logo-size);
   height: var(--set-logo-size);
@@ -9,7 +9,7 @@
 
 @media (max-width: 600px) {
   .set-logo {
-    --set-logo-size: 72px;
+    --set-logo-size: 140px;
   }
 }
 
@@ -21,20 +21,33 @@
 .set-container {
   display: flex;
   flex-wrap: wrap;
+  justify-content: center;
   gap: 16px;
 }
 
 .set-card {
   margin-bottom: 16px;
-  width: 200px;
-  height: 220px;
+  width: 220px;
+  height: 380px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.set-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 .set-card mat-card-content {
+  flex: 1 1 auto;
   display: flex;
+  align-items: center;
   justify-content: center;
+  min-height: 0;
+  padding-top: 8px;
 }
 
 .set-paginator {
