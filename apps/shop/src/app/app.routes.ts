@@ -9,18 +9,18 @@ export const appRoutes: Route[] = [
   {
     path: 'products',
     loadChildren: () =>
-      import('@org/shop/feature-products').then(m => m.featureProductsRoutes),
+      import('@org/shop/feature-products').then((m) => m.featureProductsRoutes),
   },
   {
     path: 'pokemon',
     loadChildren: () =>
-      import('@org/feature-pokemon').then(m => m.featurePokemonRoutes),
+      import('@org/feature-pokemon-set').then((m) => m.featurePokemonSetRoutes),
   },
   {
     path: 'products',
     loadChildren: () =>
       import('@org/shop/feature-product-detail').then(
-        m => m.featureProductDetailRoutes
+        (m) => m.featureProductDetailRoutes,
       ),
   },
   {

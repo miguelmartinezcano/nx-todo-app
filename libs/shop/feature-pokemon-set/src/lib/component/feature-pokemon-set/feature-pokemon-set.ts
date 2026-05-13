@@ -1,25 +1,36 @@
 import { Component, inject } from '@angular/core';
-import { FeaturePokemonStore } from '../../store/feature-pokemon.store';
+import { FeaturePokemonSetStore } from '../../store/feature-pokemon-set.store';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { PokemonSerieses, SeriesBrief } from '../../model/feature-pokemon.model';
+import {
+  PokemonSerieses,
+  SeriesBrief,
+} from '../../model/feature-pokemon-set.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
 import { PokemonSetSkeleton } from '@org/shop/shared-ui';
 
 @Component({
-  selector: 'lib-feature-pokemon',
-  imports: [MatCardModule, MatChipsModule, MatPaginatorModule, MatInputModule, PokemonSetSkeleton],
-  providers: [FeaturePokemonStore],
-  templateUrl: './feature-pokemon.html',
-  styleUrl: './feature-pokemon.scss',
+  selector: 'lib-feature-pokemon-set',
+  imports: [
+    MatCardModule,
+    MatChipsModule,
+    MatPaginatorModule,
+    MatInputModule,
+    PokemonSetSkeleton,
+  ],
+  providers: [FeaturePokemonSetStore],
+  templateUrl: './feature-pokemon-set.html',
+  styleUrl: './feature-pokemon-set.scss',
 })
-export class FeaturePokemon {
-  readonly store = inject(FeaturePokemonStore);
+export class FeaturePokemonSet {
+  readonly store = inject(FeaturePokemonSetStore);
   readonly serieses = PokemonSerieses;
 
   isSeriesSelected(series: SeriesBrief) {
-    return this.store.filter().selectedSeries.some((selectedSeries) => selectedSeries.id === series.id);
+    return this.store
+      .filter()
+      .selectedSeries.some((selectedSeries) => selectedSeries.id === series.id);
   }
 
   onSeriesSelected(series: SeriesBrief) {

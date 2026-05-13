@@ -1,0 +1,42 @@
+.set-logo {
+  --set-logo-size: 100px;
+
+  width: var(--set-logo-size);
+  height: var(--set-logo-size);
+  object-fit: contain;
+  display: block;
+}
+
+@media (max-width: 600px) {
+  .set-logo {
+    --set-logo-size: 72px;
+  }
+}
+
+.pokemon-set-container {
+  max-width: 1150px;
+  margin: 0 auto;
+}
+
+.set-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.set-card {
+  margin-bottom: 16px;
+  width: 200px;
+  height: 220px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.set-card mat-card-content {
+  display: flex;
+  justify-content: center;
+}
+
+.set-paginator {
+  background: #f5f5f5;
+}

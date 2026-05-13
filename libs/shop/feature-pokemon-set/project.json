@@ -1,7 +1,7 @@
 {
-  "name": "feature-pokemon",
+  "name": "feature-pokemon-set",
   "$schema": "../../../node_modules/nx/schemas/project-schema.json",
-  "sourceRoot": "libs/shop/feature-pokemon/src",
+  "sourceRoot": "libs/shop/feature-pokemon-set/src",
   "prefix": "lib",
   "projectType": "library",
   "tags": [],

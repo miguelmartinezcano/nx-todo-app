@@ -1,0 +1,64 @@
+<div class="pokemon-set-container">
+  <h2>TCG Pokemon Sets</h2>
+  @if (store.status() === 'loading') {
+  <lib-pokemon-set-skeleton />
+  } @else {
+  <div>
+    Search By Series
+    <mat-form-field>
+      <mat-label>Search</mat-label>
+      <input
+        matInput
+        [value]="store.filter().query"
+        (input)="onQueryChange($event)"
+      />
+    </mat-form-field>
+  </div>
+  <div>
+    Filter By Series
+    <mat-chip-set>
+      @for (series of serieses; track series.id) {
+      <mat-chip
+        color="primary"
+        [highlighted]="isSeriesSelected(series)"
+        (click)="onSeriesSelected(series)"
+        >{{ series.name }}</mat-chip
+      >
+      }
+    </mat-chip-set>
+  </div>
+  @if (store.filteredSeries().length != 0) {
+  <p>Displaying <b>{{ store.filteredSeries().length }}</b> sets</p>
+  }
+  <div class="set-container">
+    @for (set of store.pagedSets(); track set.id) {
+    <mat-card class="set-card" appearance="outlined">
+      <mat-card-header>
+        <mat-card-title>{{ set.name }}</mat-card-title>
+        <mat-card-subtitle
+          ><b>{{ set.cardCount.total }}</b> cards</mat-card-subtitle
+        >
+      </mat-card-header>
+      <mat-card-content>
+        <img
+          class="set-logo"
+          [src]="set.logo ? set.logo + '.png' : '/imageError.png'"
+          [alt]="set.name"
+          (error)="onLogoError($event)"
+        />
+      </mat-card-content>
+    </mat-card>
+    }
+  </div>
+  <mat-paginator
+    class="set-paginator"
+    [length]="store.filteredSeries().length"
+    [pageIndex]="store.filter().page.index"
+    [pageSize]="store.filter().page.size"
+    [pageSizeOptions]="[50, 100, 250]"
+    (page)="onPageChange($event)"
+    aria-label="Select page"
+  >
+  </mat-paginator>
+  }
+</div>
