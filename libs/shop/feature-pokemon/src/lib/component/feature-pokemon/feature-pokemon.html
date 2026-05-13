@@ -3,6 +3,13 @@
         TCG Pokemon Sets
     </h2>
     <div>
+        Search By Series
+        <mat-form-field>
+            <mat-label>Search</mat-label>
+            <input matInput [value]="store.filter().query" (input)="onQueryChange($event)">
+        </mat-form-field>
+    </div>
+    <div>
         Filter By Series
         <mat-chip-set>
             @for (series of serieses; track series.id) {
@@ -14,7 +21,7 @@
         <p>Displaying <b>{{ store.filteredSeries().length }}</b> sets</p>
     }
     <div class="set-container">
-    @for (set of store.filteredSeries(); track set.id) {
+    @for (set of store.pagedSets(); track set.id) {
         <mat-card class="set-card" appearance="outlined">
             <mat-card-header>
                 <mat-card-title>{{ set.name }}</mat-card-title>
@@ -26,4 +33,12 @@
         </mat-card>
     }
     </div>
+    <mat-paginator class="set-paginator"
+              [length]="store.filteredSeries().length"
+              [pageIndex]="store.filter().page.index"
+              [pageSize]="store.filter().page.size"
+              [pageSizeOptions]="[50, 100, 250]"
+              (page)="onPageChange($event)"
+              aria-label="Select page">
+    </mat-paginator>
 </div>

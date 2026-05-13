@@ -3,10 +3,12 @@ import { FeaturePokemonStore } from '../../store/feature-pokemon.store';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { PokemonSerieses, SeriesBrief } from '../../model/feature-pokemon.model';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'lib-feature-pokemon',
-  imports: [MatCardModule, MatChipsModule],
+  imports: [MatCardModule, MatChipsModule, MatPaginatorModule, MatInputModule],
   providers: [FeaturePokemonStore],
   templateUrl: './feature-pokemon.html',
   styleUrl: './feature-pokemon.scss',
@@ -20,8 +22,17 @@ export class FeaturePokemon {
   }
 
   onSeriesSelected(series: SeriesBrief) {
-    console.log(series);
     this.store.updateSelectedSeries(series);
+  }
+
+  onPageChange(event: PageEvent) {
+    this.store.updatePagination(event.pageIndex, event.pageSize);
+  }
+
+  onQueryChange(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    this.store.updateQuery(input.value);
   }
 
   onLogoError(event: Event) {
