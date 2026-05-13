@@ -5,7 +5,7 @@ import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { PokemonSerieses, PokemonSet, SeriesBrief } from '../model/feature-pokemon.model';
 import { FeaturePokemonService } from '../service/feature-pokemon.service';
 import { inject, computed } from '@angular/core';
-import { of, pipe, switchMap, tap } from 'rxjs';
+import { of, pipe, switchMap, tap, delay } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { ResourceStatus } from '@angular/core';
 
@@ -47,7 +47,7 @@ export const FeaturePokemonStore = signalStore(
                 tap(() => patchState(store, { status: 'loading' as ResourceStatus })),
                 switchMap(() =>
                     of(null).pipe(
-                        // delay(2000),
+                        delay(2000),
                         switchMap(() =>
                             store.featurePokemonService.getPokemonSets().pipe(
                                 tapResponse({

@@ -5,10 +5,11 @@ import { MatChipsModule } from '@angular/material/chips';
 import { PokemonSerieses, SeriesBrief } from '../../model/feature-pokemon.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
+import { PokemonSetSkeleton } from '@org/shop/shared-ui';
 
 @Component({
   selector: 'lib-feature-pokemon',
-  imports: [MatCardModule, MatChipsModule, MatPaginatorModule, MatInputModule],
+  imports: [MatCardModule, MatChipsModule, MatPaginatorModule, MatInputModule, PokemonSetSkeleton],
   providers: [FeaturePokemonStore],
   templateUrl: './feature-pokemon.html',
   styleUrl: './feature-pokemon.scss',
