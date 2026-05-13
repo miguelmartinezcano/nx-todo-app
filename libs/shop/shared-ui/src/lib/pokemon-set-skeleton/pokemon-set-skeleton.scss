@@ -1,0 +1,90 @@
+.skeleton-section {
+    margin-bottom: 16px;
+}
+
+.skeleton-label,
+.skeleton-input,
+.skeleton-chip,
+.skeleton-count,
+.skeleton-card,
+.skeleton-card-title,
+.skeleton-card-subtitle,
+.skeleton-card-image {
+    background: linear-gradient(90deg, #e0e0e0 25%, #eeeeee 50%, #e0e0e0 75%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.2s ease-in-out infinite;
+    border-radius: 4px;
+}
+
+.skeleton-label {
+    width: 140px;
+    height: 20px;
+    margin-bottom: 8px;
+}
+
+.skeleton-input {
+    width: 210px;
+    height: 56px;
+    border-radius: 8px;
+}
+
+.skeleton-chip-container,
+.skeleton-card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.skeleton-chip-container {
+    gap: 8px;
+}
+
+.skeleton-chip {
+    width: 96px;
+    height: 32px;
+    border-radius: 16px;
+}
+
+.skeleton-count {
+    width: 150px;
+    height: 24px;
+    margin-bottom: 16px;
+}
+
+.skeleton-card {
+    width: 200px;
+    height: 220px;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.skeleton-card-title {
+    width: 140px;
+    height: 24px;
+    margin-bottom: 10px;
+}
+
+.skeleton-card-subtitle {
+    width: 80px;
+    height: 18px;
+    margin-bottom: 42px;
+}
+
+.skeleton-card-image {
+    width: 100px;
+    height: 100px;
+}
+
+@keyframes skeleton-loading {
+    from {
+        background-position: 200% 0;
+    }
+
+    to {
+        background-position: -200% 0;
+    }
+}
