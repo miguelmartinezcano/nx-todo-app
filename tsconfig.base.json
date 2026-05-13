@@ -23,7 +23,7 @@
       ],
       "@org/shop/feature-products": ["libs/shop/feature-products/src/index.ts"],
       "@org/shop/shared-ui": ["libs/shop/shared-ui/src/index.ts"],
-      "@org/feature-pokemon": ["libs/shop/feature-pokemon/src/index.ts"]
+      "@org/feature-pokemon-set": ["libs/shop/feature-pokemon-set/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
