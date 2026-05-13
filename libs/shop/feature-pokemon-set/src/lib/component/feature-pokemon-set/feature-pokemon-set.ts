@@ -8,6 +8,7 @@ import {
 } from '../../model/feature-pokemon-set.model';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
+import { RouterLink } from '@angular/router';
 import { PokemonSetSkeleton } from '@org/shop/shared-ui';
 
 @Component({
@@ -18,6 +19,7 @@ import { PokemonSetSkeleton } from '@org/shop/shared-ui';
     MatPaginatorModule,
     MatInputModule,
     PokemonSetSkeleton,
+    RouterLink,
   ],
   providers: [FeaturePokemonSetStore],
   templateUrl: './feature-pokemon-set.html',

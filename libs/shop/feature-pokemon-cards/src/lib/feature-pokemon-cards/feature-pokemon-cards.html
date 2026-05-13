@@ -1,0 +1,95 @@
+<div class="pokemon-cards-container">
+  <a class="back-link" routerLink="/pokemon">&larr; Back to sets</a>
+  <h2>{{ store.setMeta()?.name ?? 'Pokemon Set' }}</h2>
+  @if (store.status() === 'loading') {
+    <lib-pokemon-set-skeleton />
+  } @else {
+    <div>
+      Search By Card Name
+      <mat-form-field>
+        <mat-label>Search</mat-label>
+        <input
+          matInput
+          [value]="store.filter().query"
+          (input)="onQueryChange($event)"
+        />
+      </mat-form-field>
+    </div>
+    @if (store.availableTypes().length > 0) {
+      <div>
+        Filter By Type
+        <mat-chip-set>
+          @for (type of store.availableTypes(); track type) {
+            <mat-chip
+              color="primary"
+              [highlighted]="isTypeSelected(type)"
+              (click)="onTypeSelected(type)"
+              >{{ type }}</mat-chip
+            >
+          }
+        </mat-chip-set>
+      </div>
+    }
+    @if (store.availableCategories().length > 0) {
+      <div>
+        Filter By Category
+        <mat-chip-set>
+          @for (category of store.availableCategories(); track category) {
+            <mat-chip
+              color="primary"
+              [highlighted]="isCategorySelected(category)"
+              (click)="onCategorySelected(category)"
+              >{{ category }}</mat-chip
+            >
+          }
+        </mat-chip-set>
+      </div>
+    }
+    @if (store.availableRarities().length > 0) {
+      <div>
+        Filter By Rarity
+        <mat-chip-set>
+          @for (rarity of store.availableRarities(); track rarity) {
+            <mat-chip
+              color="primary"
+              [highlighted]="isRaritySelected(rarity)"
+              (click)="onRaritySelected(rarity)"
+              >{{ rarity }}</mat-chip
+            >
+          }
+        </mat-chip-set>
+      </div>
+    }
+    @if (store.filteredCards().length != 0) {
+      <p>Displaying <b>{{ store.filteredCards().length }}</b> cards</p>
+    }
+    <div class="card-container">
+      @for (card of store.pagedCards(); track card.id) {
+        <mat-card class="card-card" appearance="outlined">
+          <mat-card-header>
+            <mat-card-title>{{ card.name }}</mat-card-title>
+            <mat-card-subtitle>#{{ card.localId }}</mat-card-subtitle>
+          </mat-card-header>
+          <mat-card-content>
+            <img
+              class="card-image"
+              [src]="card.image ? card.image + '/low.png' : '/imageError.png'"
+              [alt]="card.name"
+              (error)="onLogoError($event)"
+            />
+          </mat-card-content>
+        </mat-card>
+      }
+    </div>
+    <mat-paginator
+      class="card-paginator"
+      [length]="store.filteredCards().length"
+      [pageIndex]="store.filter().page.index"
+      [pageSize]="store.filter().page.size"
+      [pageSizeOptions]="[50, 100, 250]"
+      (page)="onPageChange($event)"
+      aria-label="Select page"
+    >
+    </mat-paginator>
+  }
+</div>

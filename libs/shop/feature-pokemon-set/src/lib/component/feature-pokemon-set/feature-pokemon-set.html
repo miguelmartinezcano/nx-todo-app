@@ -32,7 +32,11 @@
   }
   <div class="set-container">
     @for (set of store.pagedSets(); track set.id) {
-    <mat-card class="set-card" appearance="outlined">
+    <mat-card
+      class="set-card"
+      appearance="outlined"
+      [routerLink]="['/pokemon', set.id]"
+    >
       <mat-card-header>
         <mat-card-title>{{ set.name }}</mat-card-title>
         <mat-card-subtitle
