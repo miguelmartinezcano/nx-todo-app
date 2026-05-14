@@ -60,6 +60,13 @@
         </mat-chip-set>
       </div>
     }
+    <div>
+      Filter By Status
+      <mat-chip-set>
+        <mat-chip color="primary" (click)="toggleStatus('want')">Want</mat-chip>
+        <mat-chip color="primary" (click)="toggleStatus('own')">Own</mat-chip>
+      </mat-chip-set>
+    </div>
     @if (store.filteredCards().length != 0) {
       <p>Displaying <b>{{ store.filteredCards().length }}</b> cards</p>
     }

@@ -70,6 +70,10 @@ export class FeaturePokemonCards implements OnInit {
     this.ownedCards.set(next);
   }
 
+  toggleStatus(cardStatus: 'want' | 'own') {
+    this.store.toggleStatus(cardStatus);
+  }
+
   ngOnInit() {
     const setId = this.route.snapshot.paramMap.get('setId');
     if (setId) {
