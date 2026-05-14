@@ -69,6 +69,10 @@ export const FeaturePokemonSetStore = signalStore(
                     const updatedSets = sets.map((set) => ({
                       ...set,
                       series: store.calculateSeries(set),
+                      setStatus: {
+                        want: 0,
+                        own: 0,
+                      },
                     }));
                     patchState(store, setEntities(updatedSets), {
                       status: 'success' as ResourceStatus,
