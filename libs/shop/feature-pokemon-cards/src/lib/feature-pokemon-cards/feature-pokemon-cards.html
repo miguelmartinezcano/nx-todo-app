@@ -63,8 +63,18 @@
     <div>
       Filter By Status
       <mat-chip-set>
-        <mat-chip color="primary" (click)="toggleStatus('want')">Want</mat-chip>
-        <mat-chip color="primary" (click)="toggleStatus('own')">Own</mat-chip>
+        <mat-chip
+          color="primary"
+          [highlighted]="store.filter().selectedStatus.includes('want')"
+          (click)="toggleStatus('want')"
+          >Want</mat-chip
+        >
+        <mat-chip
+          color="primary"
+          [highlighted]="store.filter().selectedStatus.includes('own')"
+          (click)="toggleStatus('own')"
+          >Own</mat-chip
+        >
       </mat-chip-set>
     </div>
     @if (store.filteredCards().length != 0) {
