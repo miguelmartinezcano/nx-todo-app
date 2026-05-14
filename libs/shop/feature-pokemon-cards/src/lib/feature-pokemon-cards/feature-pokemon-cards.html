@@ -78,6 +78,33 @@
               (error)="onLogoError($event)"
             />
           </mat-card-content>
+          <div class="card-actions">
+            <button
+              [matButton]="isWanted(card.id) ? 'filled' : 'outlined'"
+              color="primary"
+              (click)="toggleWant(card.id)"
+            >
+              {{ isWanted(card.id) ? 'Wanted' : 'Want' }}
+            </button>
+            <button
+              [matButton]="isOwned(card.id) ? 'filled' : 'outlined'"
+              color="accent"
+              (click)="toggleOwn(card.id)"
+            >
+              {{ isOwned(card.id) ? 'Owned' : 'Own' }}
+            </button>
+            <mat-form-field appearance="outline" class="quantity-field" subscriptSizing="dynamic">
+              <mat-label>Qty</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                [disabled]="!isOwned(card.id)"
+                [value]="getQuantity(card.id)"
+                (input)="onQuantityChange(card.id, $event)"
+              />
+            </mat-form-field>
+          </div>
         </mat-card>
       }
     </div>
