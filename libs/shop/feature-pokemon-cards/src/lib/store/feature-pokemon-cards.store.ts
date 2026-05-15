@@ -7,7 +7,7 @@ import {
   withComputed,
   patchState,
 } from '@ngrx/signals';
-import { setEntities, withEntities } from '@ngrx/signals/entities';
+import { setEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { computed, inject, ResourceStatus } from '@angular/core';
@@ -162,6 +162,63 @@ export const FeaturePokemonCardsStore = signalStore(
           page: { index: pageIndex, size: pageSize },
         },
       });
+    },
+    toggleWant: (cardId: string) => {
+      const card = store.entityMap()[cardId];
+      if (!card) return;
+      patchState(
+        store,
+        updateEntity({
+          id: cardId,
+          changes: {
+            cardStatus: {
+              ...card.cardStatus,
+              wantStatus: !card.cardStatus.wantStatus,
+            },
+          },
+        }),
+      );
+    },
+    toggleOwn: (cardId: string) => {
+      const card = store.entityMap()[cardId];
+      if (!card) return;
+      patchState(
+        store,
+        updateEntity({
+          id: cardId,
+          changes: {
+            cardStatus: {
+              ...card.cardStatus,
+              ownStatus: {
+                ...card.cardStatus.ownStatus,
+                own: !card.cardStatus.ownStatus.own,
+                quantity: card.cardStatus.ownStatus.own
+                  ? 0
+                  : card.cardStatus.ownStatus.quantity + 1,
+              },
+            },
+          },
+        }),
+      );
+    },
+    updateQuantity: (cardId: string, quantity: number) => {
+      const card = store.entityMap()[cardId];
+      if (!card) return;
+      patchState(
+        store,
+        updateEntity({
+          id: cardId,
+          changes: {
+            cardStatus: {
+              ...card.cardStatus,
+              ownStatus: {
+                ...card.cardStatus.ownStatus,
+                quantity,
+              },
+            },
+          },
+        }),
+      );
     },
   })),
   withComputed((store) => ({

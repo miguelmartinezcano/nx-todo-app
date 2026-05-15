@@ -33,41 +33,27 @@ export class FeaturePokemonCards implements OnInit {
   readonly quantities = signal<Record<string, number>>({});
 
   isOwned(cardId: string) {
-    return this.ownedCards().has(cardId);
+    return this.store.entityMap()[cardId]?.cardStatus.ownStatus.own ?? false;
   }
 
   isWanted(cardId: string) {
-    return this.wantedCards().has(cardId);
+    return this.store.entityMap()[cardId]?.cardStatus.wantStatus ?? false;
   }
 
   toggleWant(cardId: string) {
-    const next = new Set(this.wantedCards());
-    if (next.has(cardId)) {
-      next.delete(cardId);
-    } else {
-      next.add(cardId);
-    }
-    this.wantedCards.set(next);
-  }
-
-  getQuantity(cardId: string) {
-    return this.quantities()[cardId] ?? 0;
-  }
-
-  onQuantityChange(cardId: string, event: Event) {
-    const value = Number((event.target as HTMLInputElement).value) || 0;
-    this.quantities.update((q) => ({ ...q, [cardId]: value }));
+    this.store.toggleWant(cardId);
   }
 
   toggleOwn(cardId: string) {
-    const next = new Set(this.ownedCards());
-    if (next.has(cardId)) {
-      next.delete(cardId);
-      this.quantities.update((q) => ({ ...q, [cardId]: 0 }));
-    } else {
-      next.add(cardId);
-    }
-    this.ownedCards.set(next);
+    this.store.toggleOwn(cardId);
+  }
+
+  getQuantity(cardId: string) {
+    return this.store.entityMap()[cardId]?.cardStatus.ownStatus.quantity ?? 0;
+  }
+
+  onQuantityChange(cardId: string, event: Event) {
+    this.store.updateQuantity(cardId, Number((event.target as HTMLInputElement).value) || 0);
   }
 
   toggleStatus(cardStatus: 'want' | 'own') {

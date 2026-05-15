@@ -16,4 +16,9 @@ export class FeaturePokemonCardsService {
   getCard(cardId: string) {
     return this.http.get<PokemonCard>(`${this.apiUrl}/cards/${cardId}`);
   }
+
+  updateCard(cardId: string, cardStatus: 'want' | 'own') {
+    // TODO: Implement update card endpoint
+    console.log('Updating card', cardId, 'with status', cardStatus);
+  }
 }
