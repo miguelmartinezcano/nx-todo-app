@@ -163,44 +163,68 @@ export const FeaturePokemonCardsStore = signalStore(
         },
       });
     },
-    toggleWant: (cardId: string) => {
-      const card = store.entityMap()[cardId];
-      if (!card) return;
-      patchState(
-        store,
-        updateEntity({
-          id: cardId,
-          changes: {
-            cardStatus: {
-              ...card.cardStatus,
-              wantStatus: !card.cardStatus.wantStatus,
-            },
-          },
-        }),
-      );
-    },
-    toggleOwn: (cardId: string) => {
-      const card = store.entityMap()[cardId];
-      if (!card) return;
-      patchState(
-        store,
-        updateEntity({
-          id: cardId,
-          changes: {
-            cardStatus: {
-              ...card.cardStatus,
-              ownStatus: {
-                ...card.cardStatus.ownStatus,
-                own: !card.cardStatus.ownStatus.own,
-                quantity: card.cardStatus.ownStatus.own
-                  ? 0
-                  : card.cardStatus.ownStatus.quantity + 1,
+    toggleWant: rxMethod<string>(
+      pipe(
+        switchMap((cardId) => {
+          const card = store.entityMap()[cardId];
+          if (!card) return of(null);
+          return store.cardsService.updateCard(cardId, 'want').pipe(
+            tapResponse({
+              next: () =>
+                patchState(
+                  store,
+                  updateEntity({
+                    id: cardId,
+                    changes: {
+                      cardStatus: {
+                        ...card.cardStatus,
+                        wantStatus: !card.cardStatus.wantStatus,
+                      },
+                    },
+                  }),
+                ),
+              error: () => {
+                /* keep state unchanged on failure */
               },
-            },
-          },
+            }),
+          );
         }),
-      );
-    },
+      ),
+    ),
+    toggleOwn: rxMethod<string>(
+      pipe(
+        switchMap((cardId) => {
+          const card = store.entityMap()[cardId];
+          if (!card) return of(null);
+          return store.cardsService.updateCard(cardId, 'own').pipe(
+            tapResponse({
+              next: () =>
+                patchState(
+                  store,
+                  updateEntity({
+                    id: cardId,
+                    changes: {
+                      cardStatus: {
+                        ...card.cardStatus,
+                        ownStatus: {
+                          ...card.cardStatus.ownStatus,
+                          own: !card.cardStatus.ownStatus.own,
+                          quantity: card.cardStatus.ownStatus.own
+                            ? 0
+                            : card.cardStatus.ownStatus.quantity + 1,
+                        },
+                      },
+                    },
+                  }),
+                ),
+              error: () => {
+                /* keep state unchanged on failure */
+              },
+            }),
+          );
+        }),
+      ),
+    ),
     updateQuantity: (cardId: string, quantity: number) => {
       const card = store.entityMap()[cardId];
       if (!card) return;

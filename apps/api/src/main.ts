@@ -134,6 +134,38 @@ app.get('/api/products-metadata/price-range', (req, res) => {
   }
 });
 
+// Pokemon cards endpoints (dummy)
+app.put('/api/cards/:cardId/status', (req, res) => {
+  try {
+    const { cardId } = req.params;
+    const { status } = req.body ?? {};
+
+    if (status !== 'want' && status !== 'own') {
+      const response: ApiResponse<null> = {
+        data: null,
+        success: false,
+        error: `Invalid status "${status}". Expected "want" or "own".`,
+      };
+      return res.status(400).json(response);
+    }
+
+    console.log(`[cards] toggling "${status}" status for card ${cardId}`);
+
+    const response: ApiResponse<{ cardId: string; status: 'want' | 'own' }> = {
+      data: { cardId, status },
+      success: true,
+    };
+    res.json(response);
+  } catch (error) {
+    const response: ApiResponse<null> = {
+      data: null,
+      success: false,
+      error: error instanceof Error ? error.message : 'Unknown error',
+    };
+    res.status(500).json(response);
+  }
+});
+
 app.listen(port, host, () => {
   console.log(`[ ready ] http://${host}:${port}`);
 });
