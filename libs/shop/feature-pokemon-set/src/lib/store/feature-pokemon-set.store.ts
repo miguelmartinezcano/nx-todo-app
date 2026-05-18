@@ -7,7 +7,7 @@ import {
   withComputed,
   patchState,
 } from '@ngrx/signals';
-import { setEntities, withEntities } from '@ngrx/signals/entities';
+import { setEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import {
@@ -39,6 +39,7 @@ const initialState: PokemonState = {
 };
 
 export const FeaturePokemonSetStore = signalStore(
+  { providedIn: 'root' },
   withDevtools('PokemonSetStore'),
   withState(initialState),
   withEntities<PokemonSet>(),
@@ -46,9 +47,11 @@ export const FeaturePokemonSetStore = signalStore(
     featurePokemonService: inject(FeaturePokemonSetService),
     calculateSeries: (set: PokemonSet): SeriesBrief => {
       const id = set.logo?.split('/en/')[1]?.split('/')[0] ?? 'misc';
-      const series =
-        PokemonSerieses.find((series) => series.id === id) ??
-        PokemonSerieses.find((series) => series.id === 'misc')!;
+      const series = PokemonSerieses.find((s) => s.id === id) ??
+        PokemonSerieses.find((s) => s.id === 'misc') ?? {
+          id: 'misc',
+          name: 'Misc',
+        };
       return {
         id,
         name: series.name,
@@ -124,6 +127,25 @@ export const FeaturePokemonSetStore = signalStore(
           page: { index: pageIndex, size: pageSize },
         },
       });
+    },
+    adjustSetStatus: (
+      setId: string,
+      delta: { want?: number; own?: number },
+    ) => {
+      const current = store.entityMap()[setId];
+      if (!current) return;
+      patchState(
+        store,
+        updateEntity({
+          id: setId,
+          changes: {
+            setStatus: {
+              want: Math.max(0, current.setStatus.want + (delta.want ?? 0)),
+              own: Math.max(0, current.setStatus.own + (delta.own ?? 0)),
+            },
+          },
+        }),
+      );
     },
   })),
   withComputed((store) => ({

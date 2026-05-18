@@ -15,6 +15,7 @@ import { forkJoin, map, of, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { PokemonCard } from '../model/feature-pokemon-cards.model';
 import { FeaturePokemonCardsService } from '../service/feature-pokemon-cards.service';
+import { FeaturePokemonSetStore } from '@org/feature-pokemon-set';
 
 type SetMeta = {
   id: string;
@@ -58,6 +59,7 @@ export const FeaturePokemonCardsStore = signalStore(
   withEntities<PokemonCard>(),
   withProps(() => ({
     cardsService: inject(FeaturePokemonCardsService),
+    setStore: inject(FeaturePokemonSetStore),
   })),
   withMethods((store) => ({
     loadCardsForSet: rxMethod<string>(
@@ -170,7 +172,7 @@ export const FeaturePokemonCardsStore = signalStore(
           if (!card) return of(null);
           return store.cardsService.updateCard(cardId, 'want').pipe(
             tapResponse({
-              next: () =>
+              next: () => {
                 patchState(
                   store,
                   updateEntity({
@@ -182,7 +184,14 @@ export const FeaturePokemonCardsStore = signalStore(
                       },
                     },
                   }),
-                ),
+                );
+                const setId = store.setMeta()?.id;
+                if (setId) {
+                  store.setStore.adjustSetStatus(setId, {
+                    want: card.cardStatus.wantStatus ? -1 : 1,
+                  });
+                }
+              },
               error: () => {
                 /* keep state unchanged on failure */
               },
@@ -198,7 +207,7 @@ export const FeaturePokemonCardsStore = signalStore(
           if (!card) return of(null);
           return store.cardsService.updateCard(cardId, 'own').pipe(
             tapResponse({
-              next: () =>
+              next: () => {
                 patchState(
                   store,
                   updateEntity({
@@ -216,7 +225,14 @@ export const FeaturePokemonCardsStore = signalStore(
                       },
                     },
                   }),
-                ),
+                );
+                const setId = store.setMeta()?.id;
+                if (setId) {
+                  store.setStore.adjustSetStatus(setId, {
+                    own: card.cardStatus.ownStatus.own ? -1 : 1,
+                  });
+                }
+              },
               error: () => {
                 /* keep state unchanged on failure */
               },
