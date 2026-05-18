@@ -4,7 +4,7 @@
   "sourceRoot": "libs/shop/feature-pokemon-set/src",
   "prefix": "lib",
   "projectType": "library",
-  "tags": [],
+  "tags": ["scope:shop", "type:feature"],
   "targets": {
     "lint": {
       "executor": "@nx/eslint:lint"
