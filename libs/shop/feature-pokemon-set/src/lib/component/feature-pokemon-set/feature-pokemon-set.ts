@@ -21,7 +21,6 @@ import { PokemonSetSkeleton } from '@org/shop/shared-ui';
     PokemonSetSkeleton,
     RouterLink,
   ],
-  providers: [FeaturePokemonSetStore],
   templateUrl: './feature-pokemon-set.html',
   styleUrl: './feature-pokemon-set.scss',
 })

@@ -13,6 +13,16 @@ export interface PokemonSetDetail {
   cards: CardBrief[];
 }
 
+export type CardStatus = {
+  wantStatus: boolean;
+  ownStatus: OwnStatus;
+};
+
+export type OwnStatus = {
+  own: boolean;
+  quantity: number;
+};
+
 export interface PokemonCard {
   id: string;
   localId: string;
@@ -21,4 +31,5 @@ export interface PokemonCard {
   category: string;
   rarity?: string;
   types?: string[];
+  cardStatus: CardStatus;
 }

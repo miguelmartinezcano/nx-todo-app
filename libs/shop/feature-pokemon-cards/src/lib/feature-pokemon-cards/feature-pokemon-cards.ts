@@ -1,11 +1,13 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, signal } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
 import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatInputModule } from '@angular/material/input';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { PokemonSetSkeleton } from '@org/shop/shared-ui';
 import { FeaturePokemonCardsStore } from '../store/feature-pokemon-cards.store';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'lib-feature-pokemon-cards',
@@ -15,7 +17,9 @@ import { FeaturePokemonCardsStore } from '../store/feature-pokemon-cards.store';
     MatChipsModule,
     MatPaginatorModule,
     MatInputModule,
+    MatFormFieldModule,
     PokemonSetSkeleton,
+    MatButtonModule,
   ],
   providers: [FeaturePokemonCardsStore],
   templateUrl: './feature-pokemon-cards.html',
@@ -24,6 +28,37 @@ import { FeaturePokemonCardsStore } from '../store/feature-pokemon-cards.store';
 export class FeaturePokemonCards implements OnInit {
   private readonly route = inject(ActivatedRoute);
   readonly store = inject(FeaturePokemonCardsStore);
+  readonly ownedCards = signal<Set<string>>(new Set());
+  readonly wantedCards = signal<Set<string>>(new Set());
+  readonly quantities = signal<Record<string, number>>({});
+
+  isOwned(cardId: string) {
+    return this.store.entityMap()[cardId]?.cardStatus.ownStatus.own ?? false;
+  }
+
+  isWanted(cardId: string) {
+    return this.store.entityMap()[cardId]?.cardStatus.wantStatus ?? false;
+  }
+
+  toggleWant(cardId: string) {
+    this.store.toggleWant(cardId);
+  }
+
+  toggleOwn(cardId: string) {
+    this.store.toggleOwn(cardId);
+  }
+
+  getQuantity(cardId: string) {
+    return this.store.entityMap()[cardId]?.cardStatus.ownStatus.quantity ?? 0;
+  }
+
+  onQuantityChange(cardId: string, event: Event) {
+    this.store.updateQuantity(cardId, Number((event.target as HTMLInputElement).value) || 0);
+  }
+
+  toggleStatus(cardStatus: 'want' | 'own') {
+    this.store.toggleStatus(cardStatus);
+  }
 
   ngOnInit() {
     const setId = this.route.snapshot.paramMap.get('setId');

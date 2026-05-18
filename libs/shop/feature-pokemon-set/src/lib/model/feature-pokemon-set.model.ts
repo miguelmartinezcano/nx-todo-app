@@ -10,6 +10,12 @@ export interface PokemonSet {
   legal: LegalObject;
   boosters?: Booster[];
   cards: CardBrief[];
+  setStatus: setStatus
+}
+
+export interface setStatus {
+  want: number;
+  own: number;
 }
 
 export interface CardCountObject {

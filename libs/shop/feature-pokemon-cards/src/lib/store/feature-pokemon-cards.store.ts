@@ -7,14 +7,15 @@ import {
   withComputed,
   patchState,
 } from '@ngrx/signals';
-import { setEntities, withEntities } from '@ngrx/signals/entities';
+import { setEntities, updateEntity, withEntities } from '@ngrx/signals/entities';
 import { withDevtools } from '@angular-architects/ngrx-toolkit';
 import { rxMethod } from '@ngrx/signals/rxjs-interop';
 import { computed, inject, ResourceStatus } from '@angular/core';
-import { forkJoin, of, pipe, switchMap, tap } from 'rxjs';
+import { forkJoin, map, of, pipe, switchMap, tap } from 'rxjs';
 import { tapResponse } from '@ngrx/operators';
 import { PokemonCard } from '../model/feature-pokemon-cards.model';
 import { FeaturePokemonCardsService } from '../service/feature-pokemon-cards.service';
+import { FeaturePokemonSetStore } from '@org/feature-pokemon-set';
 
 type SetMeta = {
   id: string;
@@ -31,6 +32,7 @@ type CardsState = {
     selectedTypes: string[];
     selectedCategories: string[];
     selectedRarities: string[];
+    selectedStatus: ('want' | 'own')[];
     page: { index: number; size: number };
   };
 };
@@ -43,11 +45,12 @@ const initialState: CardsState = {
     selectedTypes: [],
     selectedCategories: [],
     selectedRarities: [],
+    selectedStatus: [],
     page: { index: 0, size: 50 },
   },
 };
 
-const toggle = (list: string[], value: string) =>
+const toggle = <T>(list: T[], value: T): T[] =>
   list.includes(value) ? list.filter((v) => v !== value) : [...list, value];
 
 export const FeaturePokemonCardsStore = signalStore(
@@ -56,6 +59,7 @@ export const FeaturePokemonCardsStore = signalStore(
   withEntities<PokemonCard>(),
   withProps(() => ({
     cardsService: inject(FeaturePokemonCardsService),
+    setStore: inject(FeaturePokemonSetStore),
   })),
   withMethods((store) => ({
     loadCardsForSet: rxMethod<string>(
@@ -76,7 +80,20 @@ export const FeaturePokemonCardsStore = signalStore(
                 return of([] as PokemonCard[]);
               }
               return forkJoin(
-                set.cards.map((card) => store.cardsService.getCard(card.id)),
+                set.cards.map((card) =>
+                  store.cardsService.getCard(card.id).pipe(
+                    map((cardData: PokemonCard) => ({
+                      ...cardData,
+                      cardStatus: {
+                        wantStatus: false,
+                        ownStatus: {
+                          own: false,
+                          quantity: 0,
+                        },
+                      },
+                    })),
+                  ),
+                ),
               );
             }),
             tapResponse({
@@ -131,6 +148,15 @@ export const FeaturePokemonCardsStore = signalStore(
         },
       });
     },
+    toggleStatus: (status: 'want' | 'own') => {
+      patchState(store, {
+        filter: {
+          ...store.filter(),
+          selectedStatus: toggle(store.filter().selectedStatus, status),
+          page: { index: 0, size: store.filter().page.size },
+        },
+      });
+    },
     updatePagination: (pageIndex: number, pageSize: number) => {
       patchState(store, {
         filter: {
@@ -138,6 +164,101 @@ export const FeaturePokemonCardsStore = signalStore(
           page: { index: pageIndex, size: pageSize },
         },
       });
+    },
+    toggleWant: rxMethod<string>(
+      pipe(
+        switchMap((cardId) => {
+          const card = store.entityMap()[cardId];
+          if (!card) return of(null);
+          return store.cardsService.updateCard(cardId, 'want').pipe(
+            tapResponse({
+              next: () => {
+                patchState(
+                  store,
+                  updateEntity({
+                    id: cardId,
+                    changes: {
+                      cardStatus: {
+                        ...card.cardStatus,
+                        wantStatus: !card.cardStatus.wantStatus,
+                      },
+                    },
+                  }),
+                );
+                const setId = store.setMeta()?.id;
+                if (setId) {
+                  store.setStore.adjustSetStatus(setId, {
+                    want: card.cardStatus.wantStatus ? -1 : 1,
+                  });
+                }
+              },
+              error: () => {
+                /* keep state unchanged on failure */
+              },
+            }),
+          );
+        }),
+      ),
+    ),
+    toggleOwn: rxMethod<string>(
+      pipe(
+        switchMap((cardId) => {
+          const card = store.entityMap()[cardId];
+          if (!card) return of(null);
+          return store.cardsService.updateCard(cardId, 'own').pipe(
+            tapResponse({
+              next: () => {
+                patchState(
+                  store,
+                  updateEntity({
+                    id: cardId,
+                    changes: {
+                      cardStatus: {
+                        ...card.cardStatus,
+                        ownStatus: {
+                          ...card.cardStatus.ownStatus,
+                          own: !card.cardStatus.ownStatus.own,
+                          quantity: card.cardStatus.ownStatus.own
+                            ? 0
+                            : card.cardStatus.ownStatus.quantity + 1,
+                        },
+                      },
+                    },
+                  }),
+                );
+                const setId = store.setMeta()?.id;
+                if (setId) {
+                  store.setStore.adjustSetStatus(setId, {
+                    own: card.cardStatus.ownStatus.own ? -1 : 1,
+                  });
+                }
+              },
+              error: () => {
+                /* keep state unchanged on failure */
+              },
+            }),
+          );
+        }),
+      ),
+    ),
+    updateQuantity: (cardId: string, quantity: number) => {
+      const card = store.entityMap()[cardId];
+      if (!card) return;
+      patchState(
+        store,
+        updateEntity({
+          id: cardId,
+          changes: {
+            cardStatus: {
+              ...card.cardStatus,
+              ownStatus: {
+                ...card.cardStatus.ownStatus,
+                quantity,
+              },
+            },
+          },
+        }),
+      );
     },
   })),
   withComputed((store) => ({
@@ -170,6 +291,7 @@ export const FeaturePokemonCardsStore = signalStore(
       const types = store.filter().selectedTypes;
       const categories = store.filter().selectedCategories;
       const rarities = store.filter().selectedRarities;
+      const status = store.filter().selectedStatus;
 
       return entities.filter(
         (card) =>
@@ -179,7 +301,10 @@ export const FeaturePokemonCardsStore = signalStore(
           (categories.length === 0 ||
             (card.category ? categories.includes(card.category) : false)) &&
           (rarities.length === 0 ||
-            (card.rarity ? rarities.includes(card.rarity) : false)),
+            (card.rarity ? rarities.includes(card.rarity) : false)) &&
+          (status.length === 0 ||
+            (status.includes('want') && card.cardStatus.wantStatus) ||
+            (status.includes('own') && card.cardStatus.ownStatus.own)),
       );
     }),
   })),

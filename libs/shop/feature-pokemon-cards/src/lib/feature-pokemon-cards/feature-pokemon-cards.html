@@ -2,7 +2,7 @@
   <a class="back-link" routerLink="/pokemon">&larr; Back to sets</a>
   <h2>{{ store.setMeta()?.name ?? 'Pokemon Set' }}</h2>
   @if (store.status() === 'loading') {
-    <lib-pokemon-set-skeleton />
+    <shop-lib-pokemon-set-skeleton />
   } @else {
     <div>
       Search By Card Name
@@ -60,7 +60,24 @@
         </mat-chip-set>
       </div>
     }
-    @if (store.filteredCards().length != 0) {
+    <div>
+      Filter By Status
+      <mat-chip-set>
+        <mat-chip
+          color="primary"
+          [highlighted]="store.filter().selectedStatus.includes('want')"
+          (click)="toggleStatus('want')"
+          >Want</mat-chip
+        >
+        <mat-chip
+          color="primary"
+          [highlighted]="store.filter().selectedStatus.includes('own')"
+          (click)="toggleStatus('own')"
+          >Own</mat-chip
+        >
+      </mat-chip-set>
+    </div>
+    @if (store.filteredCards().length !== 0) {
       <p>Displaying <b>{{ store.filteredCards().length }}</b> cards</p>
     }
     <div class="card-container">
@@ -78,6 +95,33 @@
               (error)="onLogoError($event)"
             />
           </mat-card-content>
+          <div class="card-actions">
+            <button
+              [matButton]="isWanted(card.id) ? 'filled' : 'outlined'"
+              color="primary"
+              (click)="toggleWant(card.id)"
+            >
+              {{ isWanted(card.id) ? 'Wanted' : 'Want' }}
+            </button>
+            <button
+              [matButton]="isOwned(card.id) ? 'filled' : 'outlined'"
+              color="accent"
+              (click)="toggleOwn(card.id)"
+            >
+              {{ isOwned(card.id) ? 'Owned' : 'Own' }}
+            </button>
+            <mat-form-field appearance="outline" class="quantity-field" subscriptSizing="dynamic">
+              <mat-label>Qty</mat-label>
+              <input
+                matInput
+                type="number"
+                min="0"
+                [disabled]="!isOwned(card.id)"
+                [value]="getQuantity(card.id)"
+                (input)="onQuantityChange(card.id, $event)"
+              />
+            </mat-form-field>
+          </div>
         </mat-card>
       }
     </div>

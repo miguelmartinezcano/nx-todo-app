@@ -1,7 +1,7 @@
 <div class="pokemon-set-container">
   <h2>TCG Pokemon Sets</h2>
   @if (store.status() === 'loading') {
-  <lib-pokemon-set-skeleton />
+  <shop-lib-pokemon-set-skeleton />
   } @else {
   <div>
     Search By Series
@@ -27,7 +27,7 @@
       }
     </mat-chip-set>
   </div>
-  @if (store.filteredSeries().length != 0) {
+  @if (store.filteredSeries().length !== 0) {
   <p>Displaying <b>{{ store.filteredSeries().length }}</b> sets</p>
   }
   <div class="set-container">
@@ -51,6 +51,10 @@
           (error)="onLogoError($event)"
         />
       </mat-card-content>
+      <div class="set-status">
+        <span>Want: {{ set.setStatus.want }}</span>
+        <span>Own: {{ set.setStatus.own }}</span>
+      </div>
     </mat-card>
     }
   </div>
