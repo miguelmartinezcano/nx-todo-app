@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, signal } from '@angular/core';
+import { Component, inject, OnInit, signal, ChangeDetectionStrategy } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -23,6 +23,7 @@ import { MatButtonModule } from '@angular/material/button';
   ],
   providers: [FeaturePokemonCardsStore],
   templateUrl: './feature-pokemon-cards.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './feature-pokemon-cards.scss',
 })
 export class FeaturePokemonCards implements OnInit {

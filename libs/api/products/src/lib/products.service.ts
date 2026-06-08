@@ -40,14 +40,16 @@ export class ProductsService {
       }
 
       if (filter.minPrice !== undefined) {
+        const minPrice = filter.minPrice;
         filteredProducts = filteredProducts.filter(
-          p => p.price >= filter.minPrice
+          p => p.price >= minPrice
         );
       }
 
       if (filter.maxPrice !== undefined) {
+        const maxPrice = filter.maxPrice;
         filteredProducts = filteredProducts.filter(
-          p => p.price <= filter.maxPrice
+          p => p.price <= maxPrice
         );
       }
 

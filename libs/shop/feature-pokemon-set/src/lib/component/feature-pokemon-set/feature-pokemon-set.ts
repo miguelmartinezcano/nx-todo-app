@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, ChangeDetectionStrategy } from '@angular/core';
 import { FeaturePokemonSetStore } from '../../store/feature-pokemon-set.store';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
@@ -22,6 +22,7 @@ import { PokemonSetSkeleton } from '@org/shop/shared-ui';
     RouterLink,
   ],
   templateUrl: './feature-pokemon-set.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrl: './feature-pokemon-set.scss',
 })
 export class FeaturePokemonSet {
