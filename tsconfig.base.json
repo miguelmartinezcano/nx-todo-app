@@ -20,14 +20,17 @@
       "@org/shop/feature-product-detail": [
         "./libs/shop/feature-product-detail/src/index.ts"
       ],
-      "@org/shop/feature-products": ["./libs/shop/feature-products/src/index.ts"],
+      "@org/shop/feature-products": [
+        "./libs/shop/feature-products/src/index.ts"
+      ],
       "@org/shop/shared-ui": ["./libs/shop/shared-ui/src/index.ts"],
       "@org/feature-pokemon-set": [
         "./libs/shop/feature-pokemon-set/src/index.ts"
       ],
       "@org/feature-pokemon-cards": [
         "./libs/shop/feature-pokemon-cards/src/index.ts"
-      ]
+      ],
+      "@org/shop/feature-register": ["./libs/shop/feature-register/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
