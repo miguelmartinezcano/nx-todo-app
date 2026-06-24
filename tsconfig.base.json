@@ -30,7 +30,10 @@
       "@org/feature-pokemon-cards": [
         "./libs/shop/feature-pokemon-cards/src/index.ts"
       ],
-      "@org/shop/feature-register": ["./libs/shop/feature-register/src/index.ts"]
+      "@org/shop/feature-register": [
+        "./libs/shop/feature-register/src/index.ts"
+      ],
+      "@org/shared/ui-accordion": ["./libs/shared/ui-accordion/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

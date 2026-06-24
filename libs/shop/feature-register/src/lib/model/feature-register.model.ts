@@ -4,4 +4,5 @@ export interface RegistrationData {
   email: string;
   password: string;
   pin: string;
+  marketingConsent: boolean;
 }

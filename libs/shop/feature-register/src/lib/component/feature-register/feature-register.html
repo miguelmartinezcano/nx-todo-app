@@ -1,5 +1,6 @@
 <div class="register-container">
     <h1>Register</h1>
+    <shared-accordion [questions]="accordionQuestions" />
     <form>
         <div>
             <label>
@@ -70,6 +71,13 @@
                 }
                 <p>Pin: {{ registrationForm.pin().value() }}</p>
             </label>
+        </div>
+        <div>
+            <label class="checkbox-label">
+                <input type="checkbox" [formField]="registrationForm.marketingConsent" />
+                Marketing Consent
+            </label>
+            <p>Marketing Consent: {{ registrationForm.marketingConsent().value() }}</p>
         </div>
     </form>
 </div>

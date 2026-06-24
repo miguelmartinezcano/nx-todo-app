@@ -1,0 +1,23 @@
+<div ngAccordionGroup class="material-accordion">
+  @for (question of questions(); track question) {
+  <h3>
+    <span ngAccordionTrigger [panel]="panel1" #trigger1="ngAccordionTrigger">
+      {{ question.question }}
+      <span
+        aria-hidden="true"
+        class="material-symbols-outlined expand-icon"
+        [class.expand-icon__expanded]="trigger1.expanded()"
+        translate="no"
+        >keyboard_arrow_up</span
+      >
+    </span>
+  </h3>
+  <div ngAccordionPanel #panel1="ngAccordionPanel">
+    <ng-template ngAccordionContent>
+      <p>
+        {{ question.answer }}
+      </p>
+    </ng-template>
+  </div>
+  }
+</div>
