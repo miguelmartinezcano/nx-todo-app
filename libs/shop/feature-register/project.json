@@ -1,0 +1,13 @@
+{
+  "name": "feature-register",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "libs/shop/feature-register/src",
+  "prefix": "lib",
+  "projectType": "library",
+  "tags": ["scope:shop", "type:feature"],
+  "targets": {
+    "lint": {
+      "executor": "@nx/eslint:lint"
+    }
+  }
+}

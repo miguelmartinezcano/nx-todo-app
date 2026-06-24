@@ -1,0 +1,75 @@
+<div class="register-container">
+    <h1>Register</h1>
+    <form>
+        <div>
+            <label>
+                First Name
+                <input type="text" [formField]="registrationForm.firstName">
+                @if (registrationForm.firstName().touched() && registrationForm.firstName().invalid()) {
+                    @for (error of registrationForm.firstName().errors(); track error) {
+                        <p class="error-list">
+                            {{ error.message }}
+                        </p>
+                    }
+                }
+                <p>First Name: {{ registrationForm.firstName().value() }}</p>
+            </label>
+        </div>
+        <div>
+            <label>
+                Last Name
+                <input type="text" [formField]="registrationForm.lastName">
+                @if (registrationForm.lastName().touched() && registrationForm.lastName().invalid()) {
+                    @for (error of registrationForm.lastName().errors(); track error) {
+                        <p class="error-list">
+                            {{ error.message }}
+                        </p>
+                    }
+                }
+                <p>Last Name: {{ registrationForm.lastName().value() }}</p>
+            </label>
+        </div>
+        <div>
+            <label>
+                Email
+                <input type="email" [formField]="registrationForm.email">
+                @if (registrationForm.email().touched() && registrationForm.email().invalid()) {
+                    @for (error of registrationForm.email().errors(); track error) {
+                        <p class="error-list">
+                            {{ error.message }}
+                        </p>
+                    }
+                }
+                <p>Email: {{ registrationForm.email().value() }}</p>
+            </label>
+        </div>
+        <div>
+            <label>
+                Password
+                <input type="password" [formField]="registrationForm.password">
+                @if (registrationForm.password().touched() && registrationForm.password().invalid()) {
+                    @for (error of registrationForm.password().errors(); track error) {
+                        <p class="error-list">
+                            {{ error.message }}
+                        </p>
+                    }
+                }
+                <p>Password: {{ registrationForm.password().value() }}</p>
+            </label>
+        </div>
+        <div>
+            <label>
+                Pin
+                <input type="text" inputmode="numeric" [formField]="registrationForm.pin">
+                @if (registrationForm.pin().touched() && registrationForm.pin().invalid()) {
+                    @for (error of registrationForm.pin().errors(); track error) {
+                        <p class="error-list">
+                            {{ error.message }}
+                        </p>
+                    }
+                }
+                <p>Pin: {{ registrationForm.pin().value() }}</p>
+            </label>
+        </div>
+    </form>
+</div>

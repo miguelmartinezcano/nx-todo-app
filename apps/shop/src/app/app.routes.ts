@@ -31,6 +31,11 @@ export const appRoutes: Route[] = [
       ),
   },
   {
+    path: 'register',
+    loadChildren: () =>
+      import('@org/shop/feature-register').then((m) => m.featureRegisterRoutes),
+  },
+  {
     path: '**',
     redirectTo: 'products',
   },
