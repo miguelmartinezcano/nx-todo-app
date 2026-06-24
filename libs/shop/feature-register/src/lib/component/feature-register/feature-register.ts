@@ -1,10 +1,16 @@
 import { Component, ChangeDetectionStrategy, signal } from '@angular/core';
 import { RegistrationData } from '../../model/feature-register.model'
 import { form, FormField, required, email, pattern, maxLength } from '@angular/forms/signals';
+import {
+  AccordionGroup,
+  AccordionTrigger,
+  AccordionPanel,
+  AccordionContent,
+} from '@angular/aria/accordion';
 
 @Component({
   selector: 'lib-feature-register',
-  imports: [FormField],
+  imports: [AccordionGroup, AccordionTrigger, AccordionPanel, AccordionContent, FormField],  
   templateUrl: './feature-register.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrl: './feature-register.scss',

@@ -9,6 +9,7 @@
   "dependencies": {
     "@angular-architects/ngrx-toolkit": "^21.0.1",
     "@angular-devkit/build-angular": "22.0.0",
+    "@angular/aria": "^22.0.2",
     "@angular/common": "22.0.0",
     "@angular/compiler": "22.0.0",
     "@angular/core": "22.0.0",
